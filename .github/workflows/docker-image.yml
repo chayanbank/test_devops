@@ -32,13 +32,22 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+      
+      - name: Build Image to Quay
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: test_devops
+          tags: latest ${{ github.sha }}
+          dockerfiles: |
+            ./Dockerfile
 
       - name: Push To quay.io
-        uses: docker/build-push-action@v2
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
         with:
-          images: ${{ secrets.QUAY_USER }}/test_devops
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          repository: quay.io/${{ secrets.QUAY_USER }}/test_devops
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/${{ secrets.QUAY_USER }}
           username: ${{ secrets.QUAY_USER }}
           password: ${{ secrets.QUAY_PASSWORD }}
