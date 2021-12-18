@@ -36,9 +36,9 @@ jobs:
       - name: Push To quay.io
         uses: docker/build-push-action@v1
         with:
-          image: ${{ secrets.QUAY_USER }}/test_devops
+          images: ${{ secrets.QUAY_USER }}/test_devops
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          registry: quay.io/${{ secrets.QUAY_USER }}
+          repository: quay.io/${{ secrets.QUAY_USER }}/test_devops
           username: ${{ secrets.QUAY_USER }}
           password: ${{ secrets.QUAY_PASSWORD }}
