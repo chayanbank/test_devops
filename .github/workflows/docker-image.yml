@@ -34,7 +34,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Push To quay.io
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           images: ${{ secrets.QUAY_USER }}/test_devops
           push: true
