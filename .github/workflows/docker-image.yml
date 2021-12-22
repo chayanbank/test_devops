@@ -1,0 +1,53 @@
+name: ci
+ 
+on:
+ push:
+   branches: [develop]
+ 
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        # https://github.com/docker/metadata-action
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{secrets.DOCKER_USER}}/hello-world-web-app-test-ci
+          
+      - name: Log in to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        # https://github.com/docker/build-push-action
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+      
+      - name: Build Image to Quay
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: test_devops
+          tags: latest
+          dockerfiles: |
+            ./Dockerfile
+
+      - name: Push To quay.io
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/${{ secrets.QUAY_USER }}
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_PASSWORD }}
