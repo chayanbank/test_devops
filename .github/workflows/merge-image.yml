@@ -2,7 +2,7 @@ name: merge
  
 on:
  pull_request:
-    branches: [main]
+    branches: [develop]
     types: [closed]
 jobs:
   merge_to_registry:
