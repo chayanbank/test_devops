@@ -1,7 +1,7 @@
 name: merge to main
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
     types: [closed]
 jobs:
   merge-develop-back-to-main:
