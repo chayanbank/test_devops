@@ -20,7 +20,7 @@ jobs:
           git checkout main
           git pull
           git merge --no-ff develop -m "Auto-merge develop back to main"
-      
+          git push
     - name: Check out the repo
       uses: actions/checkout@v2
 
