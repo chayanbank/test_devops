@@ -1,4 +1,4 @@
-name: Sync Back to main
+name: Merge to main
 
 on:
   pull_request:
