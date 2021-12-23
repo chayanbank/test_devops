@@ -3,7 +3,7 @@ name: merge
 on:
  pull_request:
     branches: [develop]
-    types: [closed]
+    types: [opened, closed]
 jobs:
   merge_to_registry:
     name: Push Docker image to Docker Hub
