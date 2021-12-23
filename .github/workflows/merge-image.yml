@@ -1,45 +1,25 @@
-name: merge
- 
+name: Sync Back to main
+
 on:
- pull_request:
-    branches: [develop]
-    types: [opened, closed]
+  push:
+    branches:
+      - develop
+
 jobs:
-  merge_to_registry:
-    name: Push Docker image to Docker Hub
+  sync-branches:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    name: Syncing branches
     steps:
-
-      - name: Check out the repo
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        # https://github.com/docker/metadata-action
-        uses: docker/metadata-action@v3
+      - name: Set up Node
+        uses: actions/setup-node@v1
         with:
-          images: ${{secrets.DOCKER_USER}}/hello-world-web-app-test-ci
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v1
+          node-version: 12
+      - name: Opening pull request
+        id: pull
+        uses: tretuna/sync-branches@1.2.0
         with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push
-        # https://github.com/docker/build-push-action
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-
-      - name: Build Image to Quay
-        id: build-image
-        uses: redhat-actions/buildah-build@v2
-        with:
-          image: test_devops
-          tags: latest
-          dockerfiles: |
-            ./Dockerfile
+          GITHUB_TOKEN: ${{secrets.GIT_TOKEN}}
+          FROM_BRANCH: 'develop'
+          TO_BRANCH: 'main'
