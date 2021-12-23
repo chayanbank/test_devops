@@ -3,7 +3,7 @@ name: Merge to main
 on:
   pull_request:
     branches: [develop]
-    types: [closed]
+    types: [opened, closed]
 jobs:
   sync-branches:
 #    runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
 #          FROM_BRANCH: 'develop'
 #          TO_BRANCH: 'main' 
     runs-on: ubuntu-latest
-    name: build-image
+    name: build-images
     steps:
       - name: Checkout
         uses: actions/checkout@v2
