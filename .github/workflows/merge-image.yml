@@ -21,8 +21,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{secrets.GIT_TOKEN}}
           FROM_BRANCH: 'develop'
-          TO_BRANCH: 'main'
- 
+          TO_BRANCH: 'main' 
   build:
     runs-on: ubuntu-latest
     name: build-image
