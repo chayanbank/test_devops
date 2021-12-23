@@ -3,7 +3,7 @@ name: Merge to main
 on:
   pull_request:
     branches: [develop]
-
+    types: [closed]
 jobs:
   sync-branches:
 #    runs-on: ubuntu-latest
