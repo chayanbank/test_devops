@@ -26,6 +26,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        run: git branch
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
